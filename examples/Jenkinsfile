@@ -46,7 +46,7 @@ node() {
     if (publicProductionBaseURL != null) {
         tooboxArgs += "--production-public-base-url=${publicProductionBaseURL}"
     }
-    runToolbox(toolboxArgs)
+    runToolbox(tooboxArgs)
   }
   
   stage("Create an Application Plan") {
