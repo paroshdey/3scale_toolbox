@@ -25,7 +25,7 @@ def developerAccountId = "parosh"
 /*
  * Only needed when using self-managed APIcast or on-premises installation of 3scale
  */
-def publicStagingBaseURL = https://beer-catalog-3scale-apicast-staging.3scale-amp.cib-1594987568-f72ef11f3ab089a8c677044eb28292cd-0000.sjc03.containers.appdomain.cloud:443
+def publicStagingBaseURL = "https://beer-catalog-3scale-apicast-staging.3scale-amp.cib-1594987568-f72ef11f3ab089a8c677044eb28292cd-0000.sjc03.containers.appdomain.cloud:443"
 def publicProductionBaseURL = null // change to something such as "http://my-production-api.example.test" for self-managed APIcast or on-premises installation of 3scale
 
 node() {
