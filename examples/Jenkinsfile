@@ -17,15 +17,15 @@
  */
 
 def targetSystemName = "saas-usecase-apikey"
-def targetInstance = "3scale-saas"
+def targetInstance = "3scale-instance"
 def privateBaseURL = "http://echo-api.3scale.net"
-def testUserKey = "azerty1234567890"
-def developerAccountId = "john"
+def testUserKey = "891298c3758e94d883f5ee9870ffd930"
+def developerAccountId = "parosh"
 
 /*
  * Only needed when using self-managed APIcast or on-premises installation of 3scale
  */
-def publicStagingBaseURL = null // change to something such as "http://my-staging-api.example.test" for self-managed APIcast or on-premises installation of 3scale
+def publicStagingBaseURL = https://beer-catalog-3scale-apicast-staging.3scale-amp.cib-1594987568-f72ef11f3ab089a8c677044eb28292cd-0000.sjc03.containers.appdomain.cloud:443
 def publicProductionBaseURL = null // change to something such as "http://my-production-api.example.test" for self-managed APIcast or on-premises installation of 3scale
 
 node() {
@@ -39,22 +39,22 @@ node() {
   }
 
   stage("Import OpenAPI") {
-    def tooboxArgs = [ "3scale", "import", "openapi", "-d", targetInstance, "/artifacts/swagger.json", "--override-private-base-url=${privateBaseURL}", "-t", targetSystemName ]
+    def tooboxArgs = [ "3scale", "import", "openapi", "-d", targetInstance, "/artifacts/swagger.json", "--override-private-base-url=${privateBaseURL}", "-t", targetSystemName, "--insecure" ]
     if (publicStagingBaseURL != null) {
         tooboxArgs += "--staging-public-base-url=${publicStagingBaseURL}"
     }
     if (publicProductionBaseURL != null) {
         tooboxArgs += "--production-public-base-url=${publicProductionBaseURL}"
     }
-    runToolbox(tooboxArgs)
+    runToolbox(toolboxArgs)
   }
   
   stage("Create an Application Plan") {
-    runToolbox([ "3scale", "application-plan", "apply", targetInstance, targetSystemName, "test", "-n", "Test Plan", "--default" ])
+    runToolbox([ "3scale", "application-plan", "apply", targetInstance, targetSystemName, "test", "-n", "Test Plan", "--default", "--insecure" ])
   }
 
   stage("Create an Application") {
-    runToolbox([ "3scale", "application", "apply", targetInstance, testUserKey, "--account=${developerAccountId}", "--name=Test Application", "--description=Created by Jenkins", "--plan=test", "--service=${targetSystemName}" ])
+    runToolbox([ "3scale", "application", "apply", targetInstance, testUserKey, "--account=${developerAccountId}", "--name=Test Application", "--description=Created by Jenkins", "--plan=test", "--service=${targetSystemName}", "--insecure" ])
   }
 
   stage("Run integration tests") {
