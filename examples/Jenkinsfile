@@ -56,14 +56,16 @@ node() {
   stage("Create an Application") {
     runToolbox([ "3scale", "application", "apply", targetInstance, testUserKey, "--account=${developerAccountId}", "--name=Test Application", "--description=Created by Jenkins", "--plan=test", "--service=${targetSystemName}", "--insecure" ])
   }
+  
+  
 
   /*
   stage("Run integration tests") {
-    /*
-     * When using 3scale Hosted with hosted APIcast instance, we need to extract the proxy definition
-     * to read the Public Staging Base URL. Otherwise, we can just re-use the publicStagingBaseURL
-     * variable defined above.
-     */
+    
+ //    * When using 3scale Hosted with hosted APIcast instance, we need to extract the proxy definition
+  //   * to read the Public Staging Base URL. Otherwise, we can just re-use the publicStagingBaseURL
+   //  * variable defined above.
+     
     if (publicStagingBaseURL == null) {
       def proxyDefinition = runToolbox([ "3scale", "proxy", "show", targetInstance, targetSystemName, "sandbox" ])
       def proxy = readJSON text: proxyDefinition
@@ -79,9 +81,20 @@ node() {
     """
   }
   */
+  
+  
 
   stage("Promote to staging") {
     runToolbox([ "3scale", "proxy", "promote", targetInstance, targetSystemName ])
+  }
+}
+
+stage("User Approval") {
+  
+  input message: 'Do you want to proceed?', parameters: [booleanParam(defaultValue: true, description: 'yes', name: 'Yes'), booleanParam(defaultValue: false, description: 'no', name: 'No')], submitter: '"akhinat1@in.ibm.com"'
+}
+stage("Promote to production") {
+   runToolbox([ "3scale", "proxy", "promote", targetInstance, targetSystemName ])
   }
 }
 
