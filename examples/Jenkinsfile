@@ -16,23 +16,23 @@
  * 4. Create a new Jenkins pipeline using the content of this file.
  */
 
-def targetSystemName = "saas-usecase-apikey"
+def targetSystemName = "hosted-usecase-apikey"
 def targetInstance = "3scale-instance"
-def privateBaseURL = "http://echo-api.3scale.net"
+def privateBaseURL = "https://openbankapi-rhte-build.cib-1594987568-f72ef11f3ab089a8c677044eb28292cd-0000.sjc03.containers.appdomain.cloud"
 def testUserKey = "891298c3758e94d883f5ee9870ffd930"
 def developerAccountId = "parosh"
 
 /*
  * Only needed when using self-managed APIcast or on-premises installation of 3scale
  */
-def publicStagingBaseURL = "https://api-lifecycle-git-rhte-build.cib-1594987568-f72ef11f3ab089a8c677044eb28292cd-0000.sjc03.containers.appdomain.cloud/api"
+def publicStagingBaseURL = null
 def publicProductionBaseURL = null // change to something such as "http://my-production-api.example.test" for self-managed APIcast or on-premises installation of 3scale
 
 node() {
   stage("Fetch OpenAPI") {
     // Fetch the OpenAPI Specification file and provision it as a ConfigMap
     sh """
-    curl -sfk -o swagger.json https://raw.githubusercontent.com/microcks/api-lifecycle/master/beer-catalog-demo/api-contracts/beer-catalog-api-swagger.json
+    curl -sfk -o swagger.json https://openbankapi-rhte-build.cib-1594987568-f72ef11f3ab089a8c677044eb28292cd-0000.sjc03.containers.appdomain.cloud/v3/api-docs
     oc delete configmap openapi --ignore-not-found
     oc create configmap openapi --from-file="swagger.json"
     """
@@ -50,7 +50,7 @@ node() {
   }
   
   stage("Create an Application Plan") {
-    runToolbox([ "3scale", "application-plan", "apply", targetInstance, targetSystemName, "test", "-n", "Test Plan", "--default", "--insecure" ])
+    runToolbox([ "3scale", "application-plan", "apply", targetInstance, targetSystemName, "test", "-n", "Test Plan", "--default", "--publish", "--insecure" ])
   }
 
   stage("Create an Application") {
@@ -72,13 +72,13 @@ node() {
     sh """
     echo "Public Staging Base URL is ${publicStagingBaseURL}"
     echo "userkey is ${testUserKey}"
-    curl -vfk ${publicStagingBaseURL}/beer -H 'api-key: ${testUserKey}'
-    curl -vfk ${publicStagingBaseURL}/beer/Weissbier -H 'api-key: ${testUserKey}'
-    curl -vfk ${publicStagingBaseURL}/beer/findByStatus/available -H 'api-key: ${testUserKey}'
+    curl -vfk ${publicStagingBaseURL}/getAccounts -H 'api-key: ${testUserKey}'
+  //  curl -vfk ${publicStagingBaseURL}/beer/Weissbier -H 'api-key: ${testUserKey}'
+  //  curl -vfk ${publicStagingBaseURL}/beer/findByStatus/available -H 'api-key: ${testUserKey}'
     """
   }
   
-  stage("Promote to production") {
+  stage("Promote to staging") {
     runToolbox([ "3scale", "proxy", "promote", targetInstance, targetSystemName ])
   }
 }
