@@ -93,7 +93,7 @@ node() {
 stage("User Approval") {
   
   input message: 'Do you want to proceed?', parameters: [booleanParam(defaultValue: true, description: 'yes', name: 'Yes'), booleanParam(defaultValue: false, description: 'no', name: 'No')], submitter: '"akhinat1@in.ibm.com,parosde1@in.ibm.com,vijaykh1@in.ibm.com,anantha@ae.ibm.com"'
-  timeout(time: 3000, unit: 'SECONDS')
+  timeout(time: 50, unit: 'SECONDS')
 }
   
 stage("Promote to production") {
