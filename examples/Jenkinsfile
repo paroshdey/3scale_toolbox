@@ -57,6 +57,7 @@ node() {
     runToolbox([ "3scale", "application", "apply", targetInstance, testUserKey, "--account=${developerAccountId}", "--name=Test Application", "--description=Created by Jenkins", "--plan=test", "--service=${targetSystemName}", "--insecure" ])
   }
 
+  /*
   stage("Run integration tests") {
     /*
      * When using 3scale Hosted with hosted APIcast instance, we need to extract the proxy definition
@@ -77,7 +78,8 @@ node() {
   //  curl -vfk ${publicStagingBaseURL}/beer/findByStatus/available -H 'api-key: ${testUserKey}'
     """
   }
-  
+  */
+
   stage("Promote to staging") {
     runToolbox([ "3scale", "proxy", "promote", targetInstance, targetSystemName ])
   }
