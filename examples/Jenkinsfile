@@ -85,7 +85,7 @@ node() {
   
 
   stage("Promote to staging") {
-    runToolbox([ "3scale", "proxy", "promote", targetInstance, targetSystemName ])
+    runToolbox([ "3scale", "proxy", "promote", targetInstance, targetSystemName, "--insecure" ])
   }
 
 
