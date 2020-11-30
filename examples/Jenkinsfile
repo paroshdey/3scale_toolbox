@@ -18,7 +18,7 @@
 
 def targetSystemName = "hosted-usecase-apikey"
 def targetInstance = "3scale-instance"
-def privateBaseURL = "https://openbankapi-rhte-build.cib-1594987568-f72ef11f3ab089a8c677044eb28292cd-0000.sjc03.containers.appdomain.cloud"
+def privateBaseURL = "${userinput}"
 def testUserKey = "891298c3758e94d883f5ee9870ffd930"
 def developerAccountId = "parosh"
 
