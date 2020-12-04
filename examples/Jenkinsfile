@@ -19,6 +19,7 @@
 def targetSystemName = "hosted-usecase-apikey"
 def targetInstance = "3scale-instance"
 def privateBaseURL = "${userinput}"
+def path = "${path}"
 def testUserKey = "7e4fd68bd7238c03f545b0a5f699a55a"
 def developerAccountId = "parosh"
 
