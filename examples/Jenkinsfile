@@ -19,8 +19,8 @@
 def targetSystemName = "hosted-usecase-apikey"
 def targetInstance = "3scale-instance"
 def privateBaseURL = "${userinput}"
-def testUserKey = "e7fe6514d9540a80e37bbf5bd1b37a6c"
-def developerAccountId = "admin"
+def testUserKey = "7e4fd68bd7238c03f545b0a5f699a55a"
+def developerAccountId = "parosh"
 
 /*
  * Only needed when using self-managed APIcast or on-premises installation of 3scale
