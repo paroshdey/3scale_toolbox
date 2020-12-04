@@ -33,6 +33,8 @@ node() {
   stage("Fetch OpenAPI") {
     // Fetch the OpenAPI Specification file and provision it as a ConfigMap
     sh """
+    echo ${userinput}
+    echo ${path}
     curl -sfk -o swagger.json ${path}
     oc delete configmap openapi --ignore-not-found
     oc create configmap openapi --from-file="swagger.json"
